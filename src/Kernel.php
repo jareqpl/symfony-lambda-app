@@ -35,4 +35,30 @@ class Kernel extends BaseKernel
             $routes->import('../config/{routes}.php');
         }
     }
+    
+    public function getLogDir()
+    {
+        if (isset($_SERVER['LAMBDA_TASK_ROOT'])) {
+            return '/tmp/log/';
+        }
+
+        return parent::getLogDir();
+    }
+
+    public function getCacheDir()
+    {
+        if (isset($_SERVER['LAMBDA_TASK_ROOT'])) {
+            return '/tmp/cache/'.$this->environment;
+        }
+
+        return parent::getCacheDir();
+    }
+
+    public function getBuildDir(): string
+    {
+        if (isset($_SERVER['LAMBDA_TASK_ROOT'])) {
+            return '/tmp/var/cache/' . $this->environment;
+        }
+        return parent::getCacheDir();
+    }
 }
